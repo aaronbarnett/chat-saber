@@ -46,3 +46,5 @@ exports.completions = async (apiKey, messages) => {
   return json;
   
 };
+
+export default exports;
