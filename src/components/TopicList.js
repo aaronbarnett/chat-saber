@@ -1,8 +1,19 @@
 import React, { useState } from "react";
 
-import assets from "../services/assets";
+import { useAtom } from 'jotai'
 
-const TopicList = ({ topics, onTopicSelect }) => {
+import assets from "../services/assets";
+import TopicStore from "../services/TopicStore";
+
+window.topics = function() {
+  return JSON.parse(localStorage.getItem('topics'));
+};
+
+const TopicList = ({ onTopicSelect }) => {
+
+  const topicStore = TopicStore();
+  const [topics, setTopics] = useAtom(topicStore.atom);
+
   const [selectedTopicId, setSelectedTopicId] = useState(null);
 
   const handleTopicClick = (topic) => {
@@ -10,7 +21,7 @@ const TopicList = ({ topics, onTopicSelect }) => {
     setSelectedTopicId(topic.id);
   };
 
-  // console.log(topics);
+  console.log(topics);
 
   return (
     <>

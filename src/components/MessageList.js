@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 
+import { useAtom } from 'jotai'
+
 // import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import CancelIcon from '@mui/icons-material/Cancel';
 // import BuildCircleIcon from '@mui/icons-material/BuildCircle';
@@ -14,42 +16,52 @@ import TopicStore from "../services/TopicStore";
 
 const MessageList = ({ topicID }) => {
   const topicStore = TopicStore();
+  const [topics, setTopics] = useAtom(topicStore.atom);
+  const topic = topics.find(topic => topic.id === topicID);
 
-  const [messages, setMessages] = useState([ ...topicStore.topic(topicID).messages]);
+  // const [messages, setMessages] = useState([ ...topicStore.topic(topicID).messages]);
 
   const scrollToRef = useRef(null);
 
-  const refreshMessages = () => {
-    setMessages([ ...topicStore.topic(topicID).messages]);
-  }
+  // const refreshMessages = () => {
+  //   setMessages([ ...topicStore.topic(topicID).messages]);
+  // }
   
   useEffect(() => {
     scrollToRef.current && scrollToRef.current.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  }, [topic.messages]);
+
+
 
   const removeMessage = (id, index) => {
     topicStore.removeMessage(topicID, id);
-    refreshMessages();
+    // refreshMessages();
   }
 
   const convertMessage = (id, index, newRole) => {
     topicStore.modifyMessage(topicID, id, {role: newRole});
-    refreshMessages();
+    // refreshMessages();
   }
 
   const boopMessage = (id, index) => {
 
   }
 
+
   useEffect(() => {
-    console.log('MessageList useEffect');
-  }, [messages, topicStore.topics]);
+    console.log('MessageList useEffect topic.messages', topic.messages);
+  }, [topic.messages]);
+
+  useEffect(() => {
+    console.log('MessageList useEffect topics', topics);
+  }, [topics]);
 
 
   return (
     <div className="flex-column messages">
-      {messages.map((message, index) => (
-        <p key={index} className={`message ${message.role}`}>
+      <span>topicID: {topicID}</span>
+      {topic.messages.map((message, index) => (
+        <div key={index} className={`message ${message.role}`}>
 
           <div className="modifiers">
             <nobr>
@@ -66,7 +78,7 @@ const MessageList = ({ topicID }) => {
               <span key={index}>{line}</span>
             );
           })}
-        </p>
+        </div>
       ))}
       <div ref={scrollToRef} />
     </div>

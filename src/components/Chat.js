@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 
+import { useAtom } from 'jotai'
+
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import Slider from '@mui/material/Slider';
@@ -12,19 +14,27 @@ import MessageList from "./MessageList";
 import TopicStore from "../services/TopicStore";
 
 
-const Chat = ({ selectedTopic }) => {
+const Chat = ({ topicId }) => {
   const profile = useProfile();
-  const topicStore = TopicStore();
 
-  // let messages = selectedTopic.messages;
-  const [messages, setMessages] = useState([ ...topicStore.topic(selectedTopic.id).messages]);
-  const refreshMessages = () => {
-    setMessages([ ...topicStore.topic(selectedTopic.id).messages]);
-  }
+  const topicStore = TopicStore();
+  const [topics, setTopics] = useAtom(topicStore.atom);
+  const topic = topics.find(topic => topic.id === topicId);
+
+  
+  // let messages = topic.messages;
+  // const [messages, setMessages] = useState([ ...topicStore.topic(topicId).messages]);
+  // const refreshMessages = () => {
+  //   setMessages([ ...topicStore.topic(topicId).messages]);
+  // }
 
   useEffect(() => {
-    console.log('chat.useEffect.messages:', topicStore.topics);
-  }, [topicStore.topics]);
+    console.log('Chat useEffect topics', topics);
+  }, [topics]);
+
+  useEffect(() => {
+    console.log('Chat useEffect topic.messages', topic.messages);
+  }, [topic.messages]);
 
 
 
@@ -42,8 +52,8 @@ const Chat = ({ selectedTopic }) => {
       content: input,
     };
 
-    /* messages = */ topicStore.addMessage(selectedTopic.id, userMessage)
-    refreshMessages();
+    /* messages = */ topicStore.addMessage(topicId, userMessage)
+    // refreshMessages();
 
     setInput("");
     setMessageWaiting(true);
@@ -52,7 +62,7 @@ const Chat = ({ selectedTopic }) => {
       try{
         setIsLoading(true);
   
-        const json = await chatgpt.completions(profile.apiKey, messages);
+        const json = await chatgpt.completions(profile.apiKey, topic.messages);
   
         let message = {};
         if(json.choices){
@@ -63,8 +73,8 @@ const Chat = ({ selectedTopic }) => {
           message.role = "error";
           message.content = json.error.message;
         }
-        /* messages = */ topicStore.addMessage(selectedTopic.id, message)
-        refreshMessages();
+        /* messages = */ topicStore.addMessage(topicId, message)
+        // refreshMessages();
   
         setMessageWaiting(false);
         setIsLoading(false);
@@ -80,16 +90,16 @@ const Chat = ({ selectedTopic }) => {
       <div className="flex-row topic-header">
         <div className="topic-picture-wrap active">
           <span className="topic-picture active">
-            { selectedTopic.icon ? assets.converstaion_icons[selectedTopic.icon] : "" }
+            { topic.icon ? assets.converstaion_icons[topic.icon] : "" }
           </span>
         </div>
         <div className="flex-column topic-details">
-          <div className="topic-name">{selectedTopic.name} ({messages.length})</div>
-          <div className="topic-summary">{selectedTopic.summary}</div>
+          <div className="topic-name">{topic.name} ({topics.length}, {topic.messages.length})</div>
+          <div className="topic-summary">{topic.summary}</div>
         </div>
       </div>
 
-      <MessageList topicID={selectedTopic.id} messages={messages} />
+      <MessageList topicID={topicId} messages={topic.messages} />
 
       {isLoading && (
         <div className="flex-row message assistant loading-message">

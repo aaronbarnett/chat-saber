@@ -6,6 +6,9 @@ import assets from './assets';
 
 const topicsAtom = atomWithStorage('topics', assets.defaultTopics); //[]);
 
+// https://codesandbox.io/embed/pd46s
+
+
 function TopicStore() {
   const [topics, setTopics] = useAtom(topicsAtom);
 
@@ -25,47 +28,52 @@ function TopicStore() {
 
   const addMessage = (topicId, message) => {
     const topic = topics.find((c) => c.id === topicId);
-    console.log('TopicStore.addMessage', topicId, message, topic);
+    // console.log('TopicStore.addMessage', topicId, message, topic);
     if (topic) {
       message.id = bumpMaxId(topic);
       topic.messages.push(message);
-      setTopics(topics);
-      console.log('TopicStore.addMessage added', message);
+      setTopics([...topics]);
+      console.log('TopicStore.addMessage added', topicId, message);
     }
     return topic.messages;
   };
 
   const modifyMessage = (topicId, messageId, delta) => {
     const topic = topics.find((c) => c.id === topicId);
-    console.log('TopicStore.modifyMessage', topicId, messageId);
+    // console.log('TopicStore.modifyMessage', topicId, messageId);
     if (topic) {
       const index = topic.messages.findIndex((c) => c.id === messageId);
-      console.log('TopicStore.modifyMessage', topicId, messageId, index);
-      const message = topic.messages[index];
-      topic.messages[index]= { ...message, ...delta };
-      setTopics(topics);
-      console.log('TopicStore.modifyMessage pushed');
+      if(index >= 0){
+        // console.log('TopicStore.modifyMessage', topicId, messageId, index);
+        const message = topic.messages[index];
+        topic.messages[index]= { ...message, ...delta };
+        setTopics([...topics]);
+        console.log('TopicStore.modifyMessage pushed', topicId, messageId);
+      }
     }
     return topic.messages;
   };
 
   const removeMessage = (topicId, messageId) => {
     const topic = topics.find((c) => c.id === topicId);
-    console.log('TopicStore.removeMessage', topicId, messageId);
+    // console.log('TopicStore.removeMessage', topicId, messageId);
     if (topic) {
       const index = topic.messages.findIndex((c) => c.id === messageId);
-      console.log('TopicStore.removeMessage', topicId, messageId, index);
-      topic.messages.splice(index,1);
-      setTopics(topics);
-      console.log('TopicStore.removeMessage pushed');
+      if(index >= 0){
+        // console.log('TopicStore.removeMessage', topicId, messageId, index);
+        topic.messages.splice(index,1);
+        setTopics([...topics]);
+        console.log('TopicStore.removeMessage removed', topicId, messageId);
+      }
     }
     return topic.messages;
   };
 
   return {
+    atom: topicsAtom,
+
     topic: getTopic,
-    topics: topics, 
-    setTopics: setTopics,
+
     addMessage: addMessage,
     modifyMessage: modifyMessage,
     removeMessage: removeMessage,

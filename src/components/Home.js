@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import Login from "./Login";
 import TopicList from "./TopicList";
 import Chat from "./Chat";
+import Boop from "./Boop";
 
 import TopicStore from "../services/TopicStore";
 
@@ -36,7 +37,7 @@ const Home = () => {
           <img src={artSaberLogo} alt="Chat Saber" onClick={handleResetSelect}/>
           <span onClick={handleResetSelect}>Chat Saber</span>
         </div>
-        <TopicList topics={topicStore.topics} onTopicSelect={handleTopicSelect} />
+        <TopicList onTopicSelect={handleTopicSelect} />
         <div className="topic-list-footer" onClick={newTopic}>
           <AddCircleOutlineIcon/>
           <span>New Topic</span>
@@ -44,7 +45,7 @@ const Home = () => {
       </div>
 
       {selectedTopic ? (
-        <Chat selectedTopic={selectedTopic} />
+        <Chat topicId={selectedTopic.id} />
       ) : (
         <div className="flex-column home-base placeholder">
           <span>Chat Saber is about curating prompt sets</span>
@@ -52,6 +53,8 @@ const Home = () => {
           <span>Edit, reorder, reprioritize</span>
           <br/>
           <span>Drive consistent output</span>
+          <br/>
+          {/* <Boop/> */}
         </div>
       )}
       <Login/>
