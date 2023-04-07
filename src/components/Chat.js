@@ -5,6 +5,7 @@ import { useAtom } from 'jotai'
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import Slider from '@mui/material/Slider';
+import TextField from '@mui/material/TextField';
 
 import useProfile from "../hooks/useProfile";
 import assets from "../services/assets";
@@ -21,25 +22,7 @@ const Chat = ({ topicId }) => {
   const [topics, setTopics] = useAtom(topicStore.atom);
   const topic = topics.find(topic => topic.id === topicId);
 
-  
-  // let messages = topic.messages;
-  // const [messages, setMessages] = useState([ ...topicStore.topic(topicId).messages]);
-  // const refreshMessages = () => {
-  //   setMessages([ ...topicStore.topic(topicId).messages]);
-  // }
-
-  useEffect(() => {
-    console.log('Chat useEffect topics', topics);
-  }, [topics]);
-
-  useEffect(() => {
-    console.log('Chat useEffect topic.messages', topic.messages);
-  }, [topic.messages]);
-
-
-
   const [input, setInput] = useState("");
-  const [messageWaiting, setMessageWaiting] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (event) => {
@@ -47,20 +30,19 @@ const Chat = ({ topicId }) => {
   };
 
   const sendMessage = () => {
+    setIsLoading(true);
+
     const userMessage = {
       role: "user",
       content: input,
     };
 
-    /* messages = */ topicStore.addMessage(topicId, userMessage)
-    // refreshMessages();
-
+    topicStore.addMessage(topicId, userMessage)
+    
     setInput("");
-    setMessageWaiting(true);
 
     (async () => {
       try{
-        setIsLoading(true);
   
         const json = await chatgpt.completions(profile.apiKey, topic.messages);
   
@@ -73,10 +55,8 @@ const Chat = ({ topicId }) => {
           message.role = "error";
           message.content = json.error.message;
         }
-        /* messages = */ topicStore.addMessage(topicId, message)
-        // refreshMessages();
-  
-        setMessageWaiting(false);
+        topicStore.addMessage(topicId, message)
+        
         setIsLoading(false);
       }catch(e){
         console.log('Chat.sendMessage error:', e);
@@ -94,21 +74,22 @@ const Chat = ({ topicId }) => {
           </span>
         </div>
         <div className="flex-column topic-details">
-          <div className="topic-name">{topic.name} ({topics.length}, {topic.messages.length})</div>
-          <div className="topic-summary">{topic.summary}</div>
+          <TextField id="outlined-basic" label="Topic" variant="outlined" value={topic.name} />
+          {/* <div className="topic-name">{topic.name} ({topics.length}, {topic.messages.length})</div>
+          <div className="topic-summary">{topic.summary}</div> */}
         </div>
       </div>
 
       <MessageList topicID={topicId} messages={topic.messages} />
 
-      {isLoading && (
+      {/* {isLoading && (
         <div className="flex-row message assistant loading-message">
           <div className="message-bubble">
             <p>...</p>
             <div className="loader"></div>
           </div>
         </div>
-      )}
+      )} */}
 
 
       <div className="flex-column input-container">
@@ -141,9 +122,11 @@ const Chat = ({ topicId }) => {
           value={input}
           onChange={handleChange}
         />
-        <button className="button-primary" onClick={sendMessage}>
-          <span /*SendIcon*/ className="send-icon">►</span>
-        </button>
+        { !isLoading && (
+          <button className="button-primary" onClick={sendMessage}>
+            <span /*SendIcon*/ className="send-icon">►</span>
+          </button>
+        )}
       </div>
 
     </div>
