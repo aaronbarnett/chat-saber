@@ -59,7 +59,6 @@ const MessageList = ({ topicID }) => {
 
   return (
     <div className="flex-column messages">
-      <span>topicID: {topicID}</span>
       {topic.messages.map((message, index) => (
         <div key={index} className={`message ${message.role}`}>
 

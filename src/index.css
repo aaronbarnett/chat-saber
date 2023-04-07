@@ -216,7 +216,8 @@ span.message {
 }
 
 .message.assistant .modifiers {
-  color: var(--matFill-color);
+  color: var(--darkBorder-color);
+  border: 1px solid var(--matFill-color);
 }
 
 .message.user {

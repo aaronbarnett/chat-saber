@@ -5,9 +5,6 @@ import { useAtom } from 'jotai'
 import assets from "../services/assets";
 import TopicStore from "../services/TopicStore";
 
-window.topics = function() {
-  return JSON.parse(localStorage.getItem('topics'));
-};
 
 const TopicList = ({ onTopicSelect }) => {
 
@@ -47,7 +44,7 @@ const TopicList = ({ onTopicSelect }) => {
         </div>
         <div className="flex-column topic-details">
           <div className="topic-name">{topic.name}</div>
-          <div className="topic-summary">{topic.summary}</div>
+          <div className="topic-summary">{topic.model}</div>
         </div>
       </div>
     ))}

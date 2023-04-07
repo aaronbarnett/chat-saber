@@ -6,7 +6,15 @@ import assets from './assets';
 
 const topicsAtom = atomWithStorage('topics', assets.defaultTopics); //[]);
 
-// https://codesandbox.io/embed/pd46s
+
+window.topics = function() {
+  return JSON.parse(localStorage.getItem('topics'));
+};
+
+window.reset_topics = function() {
+  localStorage.removeItem('topics')
+};
+
 
 
 function TopicStore() {
@@ -17,6 +25,18 @@ function TopicStore() {
     return topic;
   }
 
+  
+  const modifyTopic = (topicId, delta) => {
+    const index = topics.findIndex((c) => c.id === topicId);
+    if (index >= 0) {
+      // console.log('TopicStore.modifyTopic before', topicId);
+      topics[index] = { ...topics[index], ...delta };
+      setTopics([...topics]);    
+    }
+  };
+
+
+
   const bumpMaxId = (topic) => {
     let max = topic.maxId;
     if(!max){
@@ -25,6 +45,7 @@ function TopicStore() {
     topic.maxId = max + 1;
     return topic.maxId;
   };
+
 
   const addMessage = (topicId, message) => {
     const topic = topics.find((c) => c.id === topicId);
@@ -69,10 +90,18 @@ function TopicStore() {
     return topic.messages;
   };
 
+
+
+
+
+
+
   return {
     atom: topicsAtom,
 
     topic: getTopic,
+
+    modifyTopic: modifyTopic,
 
     addMessage: addMessage,
     modifyMessage: modifyMessage,

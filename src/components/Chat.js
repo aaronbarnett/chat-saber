@@ -74,23 +74,21 @@ const Chat = ({ topicId }) => {
           </span>
         </div>
         <div className="flex-column topic-details">
-          <TextField id="outlined-basic" label="Topic" variant="outlined" value={topic.name} />
+          <TextField
+            hiddenLabel
+            id="outlined-basic"
+            label="Topic"
+            variant="outlined"
+            size="small"
+            value={topic.name}
+            onChange={(e)=>{topicStore.modifyTopic(topicId, {name: e.target.value})}}     
+            />
           {/* <div className="topic-name">{topic.name} ({topics.length}, {topic.messages.length})</div>
           <div className="topic-summary">{topic.summary}</div> */}
         </div>
       </div>
 
       <MessageList topicID={topicId} messages={topic.messages} />
-
-      {/* {isLoading && (
-        <div className="flex-row message assistant loading-message">
-          <div className="message-bubble">
-            <p>...</p>
-            <div className="loader"></div>
-          </div>
-        </div>
-      )} */}
-
 
       <div className="flex-column input-container">
         <div className="flex-row">
