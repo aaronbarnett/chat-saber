@@ -1,6 +1,7 @@
 
+const ex = {}
 
-exports.models = async (apiKey) => {
+ex.models = async (apiKey) => {
     
     const response = await fetch(
       "https://api.openai.com/v1/models",
@@ -21,8 +22,14 @@ exports.models = async (apiKey) => {
 
 
 
-exports.completions = async (apiKey, messages) => {
-    
+ex.completions = async (apiKey, messages) => {
+  const msgs = messages.map((m)=>{
+    return {
+      role: m.role,
+      content: m.content,
+    }
+  });
+
   const response = await fetch(
     "https://api.openai.com/v1/chat/completions",
     {
@@ -33,7 +40,7 @@ exports.completions = async (apiKey, messages) => {
       },
       body: JSON.stringify({
         model: "gpt-3.5-turbo",
-        messages,
+        messages: msgs,
         max_tokens: 2048,
         temperature: 0.5,
       }),
@@ -47,4 +54,5 @@ exports.completions = async (apiKey, messages) => {
   
 };
 
-export default exports;
+export default ex;
+
