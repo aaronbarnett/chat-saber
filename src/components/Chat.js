@@ -15,6 +15,8 @@ import MessageList from "./MessageList";
 import TopicStore from "../services/TopicStore";
 
 
+
+
 const Chat = ({ topicId }) => {
   const profile = useProfile();
 
@@ -70,7 +72,7 @@ const Chat = ({ topicId }) => {
       <div className="flex-row topic-header">
         <div className="topic-picture-wrap active">
           <span className="topic-picture active">
-            { topic.icon ? assets.converstaion_icons[topic.icon] : "" }
+            { topic.icon ? assets.topic_icons[topic.icon] : "" }
           </span>
         </div>
         <div className="flex-column topic-details">

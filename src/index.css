@@ -348,6 +348,13 @@ span.message {
   align-items: flex-end;
 }
 
+.topic-list-header img {
+  max-width: 32px;
+  max-height: 32px;
+  object-fit: contain;
+  margin-right: 8px;
+}
+
 .topic-list-footer {
   font-weight: bold;
   font-style: italic;
@@ -362,11 +369,8 @@ span.message {
   bottom: 0;
 }
 
-.topic-list-header img {
-  max-width: 32px;
-  max-height: 32px;
-  object-fit: contain;
-  margin-right: 8px;
+.topic-list-footer svg {
+  margin-left: 6px;
 }
 
 .topic {
@@ -398,8 +402,8 @@ span.message {
 }
 
 .topic-picture {
-  max-width: 20px;
-  max-height: 20px;
+  max-width: 24px;
+  max-height: 23px;
   object-fit: contain;
 }
 

@@ -39,7 +39,7 @@ const TopicList = ({ onTopicSelect }) => {
               selectedTopicId === topic.id ? "active" : ""
             }`}
           >
-            { topic.icon ? assets.converstaion_icons[topic.icon] : "" }
+            { topic.icon ? assets.topic_icons[topic.icon] : "" }
           </span>
         </div>
         <div className="flex-column topic-details">

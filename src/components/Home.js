@@ -11,6 +11,7 @@ import TopicStore from "../services/TopicStore";
 import artSaberLogo from "../art/saber.png";
 
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
 
 const Home = () => {
   
@@ -41,6 +42,9 @@ const Home = () => {
         <div className="topic-list-footer" onClick={newTopic}>
           <AddCircleOutlineIcon/>
           <span>New Topic</span>
+          
+          <ArrowCircleDownIcon/>
+          <span>Import Topic</span>
         </div>
       </div>
 

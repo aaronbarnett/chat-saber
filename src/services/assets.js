@@ -1,9 +1,29 @@
 
-
+import BuildCircleIcon from '@mui/icons-material/BuildCircle';
+import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
+import RunCircleIcon from '@mui/icons-material/RunCircle';
+import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
+import StarsIcon from '@mui/icons-material/Stars';
+import WhatshotIcon from '@mui/icons-material/Whatshot';
+import TonalityIcon from '@mui/icons-material/Tonality';
+import Brightness1Icon from '@mui/icons-material/Brightness1';
+import FlagCircleIcon from '@mui/icons-material/FlagCircle';
 
 
 const assets = {
     converstaion_icons: ["▦", "▧", "▨", "▩"],
+      
+    topic_icons: [
+      <BuildCircleIcon/>,
+      <CircleNotificationsIcon/>,
+      <RunCircleIcon/>,
+      <SupervisedUserCircleIcon/>,
+      <StarsIcon/>,
+      <WhatshotIcon/>,
+      <TonalityIcon/>,
+      <Brightness1Icon/>,
+      <FlagCircleIcon/>,
+    ]
 }
 
 assets.defaultTopics =  [

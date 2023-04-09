@@ -48,13 +48,13 @@ const MessageList = ({ topicID }) => {
   }
 
 
-  useEffect(() => {
-    console.log('MessageList useEffect topic.messages', topic.messages);
-  }, [topic.messages]);
+  // useEffect(() => {
+  //   console.log('MessageList useEffect topic.messages', topic.messages);
+  // }, [topic.messages]);
 
-  useEffect(() => {
-    console.log('MessageList useEffect topics', topics);
-  }, [topics]);
+  // useEffect(() => {
+  //   console.log('MessageList useEffect topics', topics);
+  // }, [topics]);
 
 
   return (
