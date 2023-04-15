@@ -1,6 +1,7 @@
 import React, { useRef  } from "react";
 
 import useProfile from "../hooks/useProfile";
+import ThemeButton from "../components/ThemeButton";
 
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -31,8 +32,7 @@ const Home = () => {
           variant="filled" 
           label="ChatGPT API Key" 
           placeholder="ChatGPT API Key"
-          size="small"
-          
+          size="small"          
         />
         <Button 
           onClick={handleLogin}
@@ -49,7 +49,8 @@ const Home = () => {
         <PowerSettingsNewIcon 
           onClick={handleLogout}
         />
-      </div>
+        {/* <ThemeButton/> */}
+      </div>      
     </>;
       
   return profile.apiKey ? <LogoutButton/> : <LoginForm/>;

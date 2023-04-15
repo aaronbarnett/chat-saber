@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 import Login from "./Login";
@@ -7,29 +7,61 @@ import Chat from "./Chat";
 import Boop from "./Boop";
 
 import TopicStore from "../services/TopicStore";
+import useProfile from "../hooks/useProfile";
 
 import artSaberLogo from "../art/saber.png";
 
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
 
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import BlockIcon from '@mui/icons-material/Block';
+
+
+
 const Home = () => {
+  const profile = useProfile();
   
-  const [selectedTopic, setSelectedTopic] = useState(null);
-  // const topics = useSelector((state) => state.topics);
+  // const [topicId, setSelectedTopic] = useState(null);
+  const [topicId, setTopicId] = useState(null);
+  const [deleteWarning, setDeleteWarning] = useState(false);
+  
   const topicStore = TopicStore();
 
-  const handleTopicSelect = (topic) => {
-    setSelectedTopic(topic);
+  const handleTopicSelect = (id) => {
+    // setSelectedTopic(topic);
+    setTopicId(id);
   };
 
   const handleResetSelect = () => {
-    setSelectedTopic(undefined);
+    // setSelectedTopic(undefined);
+    setTopicId(undefined);
   };
 
   const newTopic = () => {
     console.log('new topic');
+    topicStore.addTopic();
   };
+
+  const threatenDelete = () => {
+    setDeleteWarning(true);
+  };
+
+  const cancelDelete = () => {
+    setDeleteWarning(false);
+  };
+
+  const doDelete = (topic) => {
+    console.log('TopicList doDelete', topicId);
+    topicStore.removeTopic(topicId);
+    // const newTopic = topics[0];
+    setTopicId(undefined);
+  };
+
+  useEffect(() => {
+    setDeleteWarning(false);
+  }, [topicId]);
 
   return (
     <div className="flex-row home">
@@ -38,18 +70,46 @@ const Home = () => {
           <img src={artSaberLogo} alt="Chat Saber" onClick={handleResetSelect}/>
           <span onClick={handleResetSelect}>Chat Saber</span>
         </div>
+        
         <TopicList onTopicSelect={handleTopicSelect} />
-        <div className="topic-list-footer" onClick={newTopic}>
-          <AddCircleOutlineIcon/>
-          <span>New Topic</span>
-          
-          <ArrowCircleDownIcon/>
-          <span>Import Topic</span>
+
+        <br/>
+        <div style={{ "background-color": profile.theme.palette.background.default, color: profile.theme.palette.primary.dark }}>
+
+        </div>
+
+        <div className="topic-list-footer">
+          <div className="topic-control">
+            <AddCircleOutlineIcon onClick={newTopic}/>  
+          </div>
+          <div className="topic-control">
+            <ArrowCircleDownIcon/>
+          </div>
+          { topicId 
+          && (
+            deleteWarning 
+            ? <div className="topic-control phase">
+                <BlockIcon
+                  fontSize="small"
+                  onClick={() => cancelDelete()}
+                />
+                <DeleteForeverIcon
+                  onClick={() => doDelete()}
+                />
+              </div>
+            : 
+              <div className="topic-control">
+                <DeleteOutlineIcon
+                  onClick={() => threatenDelete()}
+                /> 
+              </div>
+            )
+          }
         </div>
       </div>
 
-      {selectedTopic ? (
-        <Chat topicId={selectedTopic.id} />
+      {topicId ? (
+        <Chat topicId={topicId} />
       ) : (
         <div className="flex-column home-base placeholder">
           <span>Chat Saber is about curating prompt sets</span>
@@ -61,7 +121,7 @@ const Home = () => {
           {/* <Boop/> */}
         </div>
       )}
-      <Login/>
+      <Login/>   
     </div>
   );
 };

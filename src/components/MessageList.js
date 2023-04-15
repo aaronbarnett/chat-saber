@@ -10,14 +10,29 @@ import CancelIcon from '@mui/icons-material/Cancel';
 // import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
 import SwapVerticalCircleIcon from '@mui/icons-material/SwapVerticalCircle';
 import ScatterPlotIcon from '@mui/icons-material/ScatterPlot';
+import MenuIcon from '@mui/icons-material/Menu';
+
+
+import TextField from '@mui/material/TextField';
+
+
+import { EditableText } from "@blueprintjs/core";
 
 import TopicStore from "../services/TopicStore";
+
+
+import { ReactSortable } from "react-sortablejs";
+
+
+
+import '../style/messages.css';
 
 
 const MessageList = ({ topicID }) => {
   const topicStore = TopicStore();
   const [topics, setTopics] = useAtom(topicStore.atom);
-  const topic = topics.find(topic => topic.id === topicID);
+  const topic = topics.find(topic => topic.id === topicID) || {};
+  
 
   // const [messages, setMessages] = useState([ ...topicStore.topic(topicID).messages]);
 
@@ -43,14 +58,32 @@ const MessageList = ({ topicID }) => {
     // refreshMessages();
   }
 
+  const updateMessage = (id, index, newRole) => {
+    // topicStore.modifyMessage(topicID, id, {role: newRole});
+    // refreshMessages();
+  }
+
+  const updateMessages = (messages) => {
+    topicStore.modifyMessages(topicID, messages);
+    // refreshMessages();
+  }
+
+  
+
+
   const boopMessage = (id, index) => {
 
   }
 
+  
+  const handleChange = (event) => {
+    // setInput(event.target.value);
+    // message.content = event.target.value;
+  };
 
-  // useEffect(() => {
-  //   console.log('MessageList useEffect topic.messages', topic.messages);
-  // }, [topic.messages]);
+  useEffect(() => {
+    console.log('MessageList useEffect topic.messages', topic.messages);
+  }, [topic.messages]);
 
   // useEffect(() => {
   //   console.log('MessageList useEffect topics', topics);
@@ -59,26 +92,42 @@ const MessageList = ({ topicID }) => {
 
   return (
     <div className="flex-column messages">
-      {topic.messages.map((message, index) => (
-        <div key={index} className={`message ${message.role}`}>
 
-          <div className="modifiers">
+      <ReactSortable 
+        list={topic.messages}
+        setList={updateMessages}
+        handle='.handle'
+      >
+        
+        {(topic.messages ? topic.messages : []).map((message, index) => (
+
+          <div key={index} className={`message ${message.role}`}>
+
+          <div className="modifiers handle">
             <nobr>
-              :{message.id}:
+              {/* :{message.id}: */}
+              
+              {message.role !== "meow"  && <MenuIcon className="handle" fontSize="small"/>}
               {message.role !== "meow"  && <ScatterPlotIcon fontSize="small" onClick={()=>boopMessage(message.id, index)}/>}
               {message.role === "user" && <SwapVerticalCircleIcon fontSize="small" onClick={()=>convertMessage(message.id, index, "system")}/>}
               {message.role === "system" && <SwapVerticalCircleIcon fontSize="small" onClick={()=>convertMessage(message.id, index, "user")}/>}
-              <CancelIcon fontSize="small" onClick={()=>removeMessage(message.id, index)}/>
+              <CancelIcon fontSize="small" onClick={()=>removeMessage(message.id)}/>
             </nobr>
           </div>
 
-          {message.content.split("\n").map((line, index) => {
-            return (
-              <span key={index}>{line}</span>
-            );
-          })}
-        </div>
-      ))}
+          <TextField 
+            multiline
+            // label="Standard" 
+            variant="standard" 
+            value={message.content}
+          />
+
+          </div>
+
+        ))}
+
+      </ReactSortable>
+
       <div ref={scrollToRef} />
     </div>
   );

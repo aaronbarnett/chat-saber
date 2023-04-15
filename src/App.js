@@ -1,15 +1,32 @@
 
+import { useState } from 'react';
+
+// import { useAtom } from "jotai";
+
+import { ThemeProvider } from '@mui/material/styles'
+
+import CssBaseline from '@mui/material/CssBaseline'
+
+import useProfile from "./hooks/useProfile";
 import Home from "./components/Home";
-// import { Provider } from "react-redux";
-// import store from "./services/store";
+
 
 
 function App() {
-  return (
-    <div className="app">
-      <Home />
-    </div>
-  );
+  const profile = useProfile();
+  // const [themeName, setThemeName] = useAtom(profile.themeAtom);
+
+	return (
+		<div className="App">
+			<ThemeProvider theme={profile.theme}>
+				<CssBaseline />
+        <Home />
+			</ThemeProvider>
+
+		</div>
+	);
 }
 
 export default App;
+
+// import ThemeButton from "./components/ThemeButton";

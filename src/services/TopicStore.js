@@ -20,11 +20,36 @@ window.reset_topics = function() {
 function TopicStore() {
   const [topics, setTopics] = useAtom(topicsAtom);
 
+
+  // const getNextTopicId = () => {
+  //   let max = 1;
+  //   if(!max){
+  //     max = Math.max.apply(Math, topics.map(function(o) { return o.id || 1; }))
+  //   }
+  //   max = max + 1;
+  //   return max;
+  // };
+
+
+
   const getTopic = (topicId) => {
     const topic = topics.find((c) => c.id === topicId);
     return topic;
   }
 
+  const addTopic = () => {
+    const allIds = [0].concat(topics.map(function(o) { return o.id || 0; }))
+    const topicId = Math.max.apply(Math, allIds) + 1;
+    const topic = {
+      id: topicId,
+      name: `New Topic ${topicId}`,
+      icon: topicId % (assets.topic_icons.length - 1),
+    };
+    console.log('TopicStore.addTopic', topic);
+    topics.push(topic);
+    setTopics([...topics]);
+    console.log('TopicStore.addMessage added', topic.id);
+  }
   
   const modifyTopic = (topicId, delta) => {
     const index = topics.findIndex((c) => c.id === topicId);
@@ -33,11 +58,21 @@ function TopicStore() {
       topics[index] = { ...topics[index], ...delta };
       setTopics([...topics]);    
     }
-  };
+  }
+
+  const removeTopic = (topicId) => {
+    const index = topics.findIndex((c) => c.id === topicId);
+    if (index >= 0) {
+      console.log('TopicStore.removeTopic before', topicId);
+      topics.splice(index,1);
+      setTopics([...topics]);    
+    }
+
+  }
 
 
 
-  const bumpMaxId = (topic) => {
+  const bumpMaxMessageId = (topic) => {
     let max = topic.maxId;
     if(!max){
       max = Math.max.apply(Math, topic.messages.map(function(o) { return o.id || 1; }))
@@ -51,7 +86,10 @@ function TopicStore() {
     const topic = topics.find((c) => c.id === topicId);
     // console.log('TopicStore.addMessage', topicId, message, topic);
     if (topic) {
-      message.id = bumpMaxId(topic);
+      message.id = bumpMaxMessageId(topic);
+      if(!topic.messages){
+        topic.messages = [];
+      }
       topic.messages.push(message);
       setTopics([...topics]);
       console.log('TopicStore.addMessage added', topicId, message);
@@ -90,6 +128,17 @@ function TopicStore() {
     return topic.messages;
   };
 
+  
+  const modifyMessages = (topicId, messages) => {
+    const topic = topics.find((c) => c.id === topicId);
+    // console.log('TopicStore.modifyMessage', topicId, messageId);
+    if (topic) {
+      topic.messages = messages;
+      setTopics([...topics]);
+      console.log('TopicStore.modifyMessage pushed', topicId, messages);
+    }
+    return topic.messages;
+  };
 
 
 
@@ -101,11 +150,15 @@ function TopicStore() {
 
     topic: getTopic,
 
+    addTopic: addTopic,
     modifyTopic: modifyTopic,
+    removeTopic: removeTopic,
 
     addMessage: addMessage,
     modifyMessage: modifyMessage,
     removeMessage: removeMessage,
+
+    modifyMessages: modifyMessages,
   };
 
 }

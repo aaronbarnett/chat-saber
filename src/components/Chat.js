@@ -15,14 +15,12 @@ import MessageList from "./MessageList";
 import TopicStore from "../services/TopicStore";
 
 
-
-
 const Chat = ({ topicId }) => {
   const profile = useProfile();
 
   const topicStore = TopicStore();
   const [topics, setTopics] = useAtom(topicStore.atom);
-  const topic = topics.find(topic => topic.id === topicId);
+  const topic = topics.find(topic => topic.id === topicId) || {};
 
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
