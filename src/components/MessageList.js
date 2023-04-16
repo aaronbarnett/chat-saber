@@ -76,9 +76,10 @@ const MessageList = ({ topicID }) => {
   }
 
   
-  const handleChange = (event) => {
+  const handleChange = (event, id) => {
     // setInput(event.target.value);
     // message.content = event.target.value;
+    topicStore.modifyMessage(topicID, id, {content: event.target.value});
   };
 
   useEffect(() => {
@@ -120,6 +121,7 @@ const MessageList = ({ topicID }) => {
             // label="Standard" 
             variant="standard" 
             value={message.content}
+            onChange={(e)=>handleChange(e, message.id)}
           />
 
           </div>
