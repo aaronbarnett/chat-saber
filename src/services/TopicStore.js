@@ -74,10 +74,17 @@ function TopicStore() {
 
   const bumpMaxMessageId = (topic) => {
     let max = topic.maxId;
+    // console.log('TopicStore.bumpMaxMessageId before', max);
     if(!max){
       max = Math.max.apply(Math, topic.messages.map(function(o) { return o.id || 1; }))
+      // console.log('TopicStore.bumpMaxMessageId max', max);
+      if(!max || max < 1){
+        max = 0;
+      }
+      // console.log('TopicStore.bumpMaxMessageId after', max);
     }
     topic.maxId = max + 1;
+    // console.log('TopicStore.bumpMaxMessageId maxId', topic.maxId);
     return topic.maxId;
   };
 
@@ -86,10 +93,10 @@ function TopicStore() {
     const topic = topics.find((c) => c.id === topicId);
     // console.log('TopicStore.addMessage', topicId, message, topic);
     if (topic) {
-      message.id = bumpMaxMessageId(topic);
       if(!topic.messages){
         topic.messages = [];
       }
+      message.id = bumpMaxMessageId(topic);
       topic.messages.push(message);
       setTopics([...topics]);
       console.log('TopicStore.addMessage added', topicId, message);

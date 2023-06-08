@@ -56,48 +56,48 @@ border: 1px dashed red;
 }
 
 .message.assistant {
-background-color: var(--matFill-color);
-align-self: flex-start;
-border-radius: 0 12px 12px 12px;
-margin-right: 32px;
+    background-color: var(--matFill-color);
+    align-self: flex-start;
+    border-radius: 0 12px 12px 12px;
+    margin-right: 32px;
 }
 
 .message.assistant .modifiers {
-color: var(--darkBorder-color);
-border: 1px solid var(--matFill-color);
+    color: var(--darkBorder-color);
+    border: 1px solid var(--matFill-color);
 }
 
 
 
 .message.user {
-background-color: var(--altFill-color);
-align-self: flex-end;
-border-radius: 12px 12px 0 12px;
-margin-left: 32px;
-color: var(--backMain-color)
+    background-color: var(--altFill-color);
+    align-self: flex-end;
+    border-radius: 12px 12px 0 12px;
+    margin-left: 32px;
+    color: var(--backMain-color)
 }
 
 
 .message.system user {
-background-color: var(--altFill-color);
-color: var(--backMain-color)
+    background-color: var(--altFill-color);
+    color: var(--backMain-color)
 }
 
 .message.user .modifiers {
-color: var(--altFill-color);
-border: 1px solid var(--altFill-color);
+    color: var(--altFill-color);
+    border: 1px solid var(--altFill-color);
 }
 
 .message.user textarea {
-background-color: var(--altFill-color);
-color: var(--backMain-color)
+    background-color: var(--altFill-color);
+    color: var(--backMain-color)
 }
 
 
 .message.system {
-border: 2px dashed var(--darkBorder-color);
-border-radius: 12px;
-margin: 0 32px;
+    border: 2px dashed var(--darkBorder-color);
+    border-radius: 12px;
+    margin: 12px 32px;
 }
 
 .message.system textarea {
@@ -107,6 +107,16 @@ margin: 0 32px;
 .message.system .modifiers {
 color: var(--darkBorder-color);
 border: 2px dashed var(--darkBorder-color);
+}
+
+
+.message.note {
+    /* background-color: var(--altFill-color); */
+    align-self: flex-end;
+    border: 3px double darkred;
+    margin-left: 64px;
+    /* color: var(--backMain-color) */
+    width: 70%;
 }
 
 
@@ -144,13 +154,36 @@ resize: none;
 
 
 
-.input-container {
-position: relative;
-width: 100%;
-padding: 16px;
-box-sizing: border-box;
-background-color: var(--backMain-color);
+.controls {
+    position: relative;
+    width: 100%;
+    padding: 16px;
+    box-sizing: border-box;
+    background-color: var(--backMain-color);
+
 }
+
+.controls .quick-fire {
+    margin-left: auto;
+
+}
+
+.controls .quick-fire .user {
+    border: 2px solid var(--altFill-color);
+    border-radius: 12px 12px 0 12px;
+}
+
+.controls .quick-fire .note {
+    border: 2px solid blue;
+}
+
+.controls .quick-fire .system {
+    border: 2px dashed var(--darkBorder-color);
+    border-radius: 12px;
+}
+
+
+
 
 .message-input {
 background-color: var(--backSecondary-color);

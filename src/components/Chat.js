@@ -6,6 +6,7 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import Slider from '@mui/material/Slider';
 import TextField from '@mui/material/TextField';
+import Tooltip from '@mui/material/Tooltip';
 
 import useProfile from "../hooks/useProfile";
 import assets from "../services/assets";
@@ -14,6 +15,9 @@ import chatgpt from "../services/chatgpt";
 import MessageList from "./MessageList";
 import TopicStore from "../services/TopicStore";
 
+import ControlPointIcon from '@mui/icons-material/ControlPoint';
+import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
+import PlayCircleFilledWhiteIcon from '@mui/icons-material/PlayCircleFilledWhite';
 
 const Chat = ({ topicId }) => {
   const profile = useProfile();
@@ -25,22 +29,30 @@ const Chat = ({ topicId }) => {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleChange = (event) => {
-    setInput(event.target.value);
+
+  const newUserMessage = () => {
+    topicStore.addMessage(topicId, {
+      role: "user",
+      content: "",
+    });
   };
 
-  const sendMessage = () => {
+  const newNote = () => {
+    topicStore.addMessage(topicId, {
+      role: "note",
+      content: "",
+    });
+  };
+
+  const newSystemMessage = () => {
+    topicStore.addMessage(topicId, {
+      role: "system",
+      content: "",
+    });
+  };
+
+  const play = () => {
     setIsLoading(true);
-
-    const userMessage = {
-      role: "user",
-      content: input,
-    };
-
-    topicStore.addMessage(topicId, userMessage)
-    
-    setInput("");
-
     (async () => {
       try{
   
@@ -62,8 +74,47 @@ const Chat = ({ topicId }) => {
         console.log('Chat.sendMessage error:', e);
       }
     })();
-
   };
+
+  // const handleChange = (event) => {
+  //   setInput(event.target.value);
+  // };
+
+  // const sendMessage = () => {
+  //   setIsLoading(true);
+
+  //   const userMessage = {
+  //     role: "user",
+  //     content: input,
+  //   };
+
+  //   topicStore.addMessage(topicId, userMessage)
+    
+  //   setInput("");
+
+  //   (async () => {
+  //     try{
+  
+  //       const json = await chatgpt.completions(profile.apiKey, topic.messages);
+  
+  //       let message = {};
+  //       if(json.choices){
+  //         message.role ="assistant";
+  //         message.choices =json.choices[0];
+  //         message.content =json.choices[0].message.content.trim();
+  //       }else{
+  //         message.role = "error";
+  //         message.content = json.error.message;
+  //       }
+  //       topicStore.addMessage(topicId, message)
+        
+  //       setIsLoading(false);
+  //     }catch(e){
+  //       console.log('Chat.sendMessage error:', e);
+  //     }
+  //   })();
+
+  // };
 
   return (
     <div className="flex-column chatbot">
@@ -90,7 +141,7 @@ const Chat = ({ topicId }) => {
 
       <MessageList topicID={topicId} messages={topic.messages} />
 
-      <div className="flex-column input-container">
+      <div className="controls flex-column input-container">
         <div className="flex-row">
           <Select
             value="gpt-3.5-turbo"
@@ -111,20 +162,32 @@ const Chat = ({ topicId }) => {
               size="small"
             ></Slider>
           </div>
+
+          <div className="quick-fire flex-row">
+            <Tooltip title="New User Message"><ControlPointIcon className="user" onClick={newUserMessage}/></Tooltip>
+            <Tooltip title="New Note"><ControlPointIcon className="note" onClick={newNote}/></Tooltip>
+            <Tooltip title="New System Message"><ControlPointIcon className="system" onClick={newSystemMessage}/></Tooltip>
+            &nbsp;
+            { !isLoading  && <Tooltip title="Play Conversation"><PlayCircleOutlineIcon onClick={play}/></Tooltip> }
+            { isLoading && <Tooltip title="waiting for reply"><PlayCircleFilledWhiteIcon/></Tooltip> }
+            
+          </div>
+
         </div>
 
-        <textarea
+        {/* <textarea
           className="message-input"
           type="text"
           placeholder="Add user message"
           value={input}
           onChange={handleChange}
-        />
-        { !isLoading && (
+        /> */}
+        {/* { !isLoading && (
           <button className="button-primary" onClick={sendMessage}>
-            <span /*SendIcon*/ className="send-icon">►</span>
+            <span className="send-icon">►</span>
           </button>
-        )}
+        )} */}
+
       </div>
 
     </div>

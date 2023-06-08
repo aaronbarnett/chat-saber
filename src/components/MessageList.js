@@ -91,48 +91,52 @@ const MessageList = ({ topicID }) => {
   // }, [topics]);
 
 
-  return (
-    <div className="flex-column messages">
+  
+  if(topic.messages)
+    return (
+      <div className="flex-column messages">
 
-      <ReactSortable 
-        list={topic.messages}
-        setList={updateMessages}
-        handle='.handle'
-      >
-        
-        {(topic.messages ? topic.messages : []).map((message, index) => (
+        <ReactSortable 
+          list={topic.messages}
+          setList={updateMessages}
+          handle='.handle'
+        >
+          
+          {topic.messages.map((message, index) => (
 
-          <div key={index} className={`message ${message.role}`}>
+            <div key={index} className={`message ${message.role}`}>
 
-          <div className="modifiers handle">
-            <nobr>
-              {/* :{message.id}: */}
-              
-              {message.role !== "meow"  && <MenuIcon className="handle" fontSize="small"/>}
-              {message.role !== "meow"  && <ScatterPlotIcon fontSize="small" onClick={()=>boopMessage(message.id, index)}/>}
-              {message.role === "user" && <SwapVerticalCircleIcon fontSize="small" onClick={()=>convertMessage(message.id, index, "system")}/>}
-              {message.role === "system" && <SwapVerticalCircleIcon fontSize="small" onClick={()=>convertMessage(message.id, index, "user")}/>}
-              <CancelIcon fontSize="small" onClick={()=>removeMessage(message.id)}/>
-            </nobr>
-          </div>
+            <div className="modifiers handle">
+              <nobr>
+                {/* :{message.id}: */}
+                
+                {message.role !== "meow"  && <MenuIcon className="handle" fontSize="small"/>}
+                {message.role !== "meow"  && <ScatterPlotIcon fontSize="small" onClick={()=>boopMessage(message.id, index)}/>}
+                {message.role === "user" && <SwapVerticalCircleIcon fontSize="small" onClick={()=>convertMessage(message.id, index, "system")}/>}
+                {message.role === "system" && <SwapVerticalCircleIcon fontSize="small" onClick={()=>convertMessage(message.id, index, "user")}/>}
+                <CancelIcon fontSize="small" onClick={()=>removeMessage(message.id)}/>
+              </nobr>
+            </div>
 
-          <TextField 
-            multiline
-            // label="Standard" 
-            variant="standard" 
-            value={message.content}
-            onChange={(e)=>handleChange(e, message.id)}
-          />
+            <TextField 
+              multiline
+              // label="Standard" 
+              variant="standard" 
+              value={message.content}
+              onChange={(e)=>handleChange(e, message.id)}
+            />
 
-          </div>
+            </div>
 
-        ))}
+          ))}
 
-      </ReactSortable>
+        </ReactSortable>
 
-      <div ref={scrollToRef} />
-    </div>
-  );
+        <div ref={scrollToRef} />
+      </div>
+    );
+  
+  return <div className="flex-column messages"></div>;
 };
 
 export default MessageList;
